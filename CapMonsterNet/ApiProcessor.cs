@@ -71,6 +71,18 @@ namespace CapMonsterNet
         {
             HttpRequestMessage requestMessage = new HttpRequestMessage();
 
+            // Auth
+            if (endpoint.SecurityType == EndpointSecurityType.ApiKey)
+            {
+                if (requestObject != null)
+                {
+                    if (requestObject.ClientKey == null)
+                    {
+                        requestObject.ClientKey = Key;
+                    }
+                }
+            }
+
             if (endpoint.Method == HttpMethod.Get)
             {
                 UriBuilder uriBuilder = new UriBuilder(endpoint.Uri);
@@ -91,17 +103,6 @@ namespace CapMonsterNet
             }
 
             requestMessage.Method = endpoint.Method;
-
-            if (endpoint.SecurityType == EndpointSecurityType.ApiKey)
-            {
-                if(requestObject != null)
-                {
-                    if(requestObject.ClientKey == null)
-                    {
-                        requestObject.ClientKey = Key;
-                    }
-                }
-            }
 
             HttpResponseMessage response;
             try

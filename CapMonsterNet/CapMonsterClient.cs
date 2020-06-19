@@ -16,7 +16,7 @@ namespace CapMonsterNet
 
         private bool disposed = false;
 
-        private const int GetTaskResultDelay = 50; 
+        private const int GetTaskResultDelay = 100; 
 
         public string Token
         {
@@ -77,50 +77,26 @@ namespace CapMonsterNet
         /// <summary>
         /// Get the result of the task
         /// </summary>
+        /// <typeparam name="CaptchaTaskResultT">The type of the task result</typeparam>
         /// <param name="taskId">The task id which was obtained using CreateTaskAsync</param>
         /// <returns>The task result</returns>
-        public async Task<CaptchaTaskResult> GetTaskResultAsync(int taskId)
+        public async Task<CaptchaTaskResultT> GetTaskResultAsync<CaptchaTaskResultT>(int taskId) where CaptchaTaskResultT : CaptchaTaskResult
         {
-            var endpoint = Endpoints.CreateTask();
+            var endpoint = Endpoints.GetTaskResult();
             var requestObject = new GetTaskResultRequest
             {
                 TaskId = taskId
             };
-            GetTaskResultResponse response;
-            while(true)
+            GetTaskResultResponse<CaptchaTaskResultT> response;
+            while (true)
             {
-                response = await apiProcessor.ProcessRequestAsync<GetTaskResultResponse>(endpoint, requestObject);
+                response = await apiProcessor.ProcessRequestAsync<GetTaskResultResponse<CaptchaTaskResultT>>(endpoint, requestObject);
                 response.EnsureSuccess();
                 if (response.Status == CaptchaTaskStatus.Ready)
                     break;
                 await Task.Delay(GetTaskResultDelay);
             }
             return response.Solution;
-        }
-
-        /// <summary>
-        /// Get the result of the task
-        /// </summary>
-        /// <typeparam name="CaptchaTaskResultT">The type of the task result</typeparam>
-        /// <param name="taskId">The task id which was obtained using CreateTaskAsync</param>
-        /// <returns>The task result</returns>
-        public async Task<CaptchaTaskResultT> GetTaskResultAsync<CaptchaTaskResultT>(int taskId) where CaptchaTaskResultT : CaptchaTaskResult
-        {
-            var endpoint = Endpoints.CreateTask();
-            var requestObject = new GetTaskResultRequest
-            {
-                TaskId = taskId
-            };
-            GetTaskResultResponse response;
-            while (true)
-            {
-                response = await apiProcessor.ProcessRequestAsync<GetTaskResultResponse>(endpoint, requestObject);
-                response.EnsureSuccess();
-                if (response.Status == CaptchaTaskStatus.Ready)
-                    break;
-                await Task.Delay(GetTaskResultDelay);
-            }
-            return (CaptchaTaskResultT)response.Solution;
         }
 
         /// <summary>

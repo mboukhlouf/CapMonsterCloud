@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CapMonsterNet.Models.Responses
 {
-    internal class GetTaskResultResponse : BaseResponse
+    internal class GetTaskResultResponse<CaptchaTaskResultT> : BaseResponse where CaptchaTaskResultT : CaptchaTaskResult
     {
         /// <summary>
         /// processing - task is not ready yet
@@ -16,6 +16,6 @@ namespace CapMonsterNet.Models.Responses
         /// <summary>
         /// Task result data
         /// </summary>
-        public CaptchaTaskResult Solution { get; set; }
+        public CaptchaTaskResultT Solution { get; set; }
     }
 }
