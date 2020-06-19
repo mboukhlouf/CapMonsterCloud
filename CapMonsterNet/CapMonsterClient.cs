@@ -99,6 +99,31 @@ namespace CapMonsterNet
         }
 
         /// <summary>
+        /// Get the result of the task
+        /// </summary>
+        /// <typeparam name="CaptchaTaskResultT">The type of the task result</typeparam>
+        /// <param name="taskId">The task id which was obtained using CreateTaskAsync</param>
+        /// <returns>The task result</returns>
+        public async Task<CaptchaTaskResultT> GetTaskResultAsync<CaptchaTaskResultT>(int taskId) where CaptchaTaskResultT : CaptchaTaskResult
+        {
+            var endpoint = Endpoints.CreateTask();
+            var requestObject = new GetTaskResultRequest
+            {
+                TaskId = taskId
+            };
+            GetTaskResultResponse response;
+            while (true)
+            {
+                response = await apiProcessor.ProcessRequestAsync<GetTaskResultResponse>(endpoint, requestObject);
+                response.EnsureSuccess();
+                if (response.Status == CaptchaTaskStatus.Ready)
+                    break;
+                await Task.Delay(GetTaskResultDelay);
+            }
+            return (CaptchaTaskResultT)response.Solution;
+        }
+
+        /// <summary>
         /// Get the available balance in the account
         /// </summary>
         /// <returns>The balance available in the account</returns>
