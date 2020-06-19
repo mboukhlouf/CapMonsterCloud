@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CapMonsterNet.Models.Responses
 {
-    public class GetBalanceResponse : BaseResponse
+    internal class GetBalanceResponse : BaseResponse
     {
         /// <summary>
         /// Available balance

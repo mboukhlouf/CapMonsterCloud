@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CapMonsterNet.Models.Requests
 {
-    public abstract class BaseRequest
+    internal abstract class BaseRequest
     {
         /// <summary>
         /// Client account key

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CapMonsterNet.Models.Requests
 {
-    public class GetBalanceRequest : BaseRequest
+    internal class GetBalanceRequest : BaseRequest
     {
     }
 }

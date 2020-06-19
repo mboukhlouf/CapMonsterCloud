@@ -21,15 +21,13 @@ namespace CapMonsterNet
 
         private bool disposed = false;
 
-        private static readonly string AuthorizationHeader = "Authorization";
-
         private static JsonSerializerSettings SerializerSettings = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
             NullValueHandling = NullValueHandling.Ignore
         };
 
-        public string Token { get; set; }
+        public string Key { get; set; }
 
         public ApiProcessor()
         {
@@ -96,7 +94,13 @@ namespace CapMonsterNet
 
             if (endpoint.SecurityType == EndpointSecurityType.ApiKey)
             {
-                requestMessage.Headers.Add(AuthorizationHeader, $"Bearer {Token}");
+                if(requestObject != null)
+                {
+                    if(requestObject.ClientKey == null)
+                    {
+                        requestObject.ClientKey = Key;
+                    }
+                }
             }
 
             HttpResponseMessage response;

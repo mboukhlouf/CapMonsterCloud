@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CapMonsterNet.Models.Requests
 {
-    public class CreateTaskRequest : BaseRequest
+    internal class CreateTaskRequest : BaseRequest
     {
         /// <summary>
         /// Task data

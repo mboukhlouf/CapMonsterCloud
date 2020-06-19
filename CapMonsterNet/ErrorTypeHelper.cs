@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CapMonsterNet
 {
-    public static class ErrorTypeHelper
+    internal static class ErrorTypeHelper
     {
         private static readonly Dictionary<ErrorType, string> descriptions = new Dictionary<ErrorType, string>()
         {

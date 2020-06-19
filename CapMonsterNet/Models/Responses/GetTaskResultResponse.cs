@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CapMonsterNet.Models.Responses
 {
-    public class GetTaskResultResponse : BaseResponse
+    internal class GetTaskResultResponse : BaseResponse
     {
         /// <summary>
         /// processing - task is not ready yet

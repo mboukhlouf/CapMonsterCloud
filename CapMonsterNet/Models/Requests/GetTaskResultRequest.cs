@@ -5,7 +5,7 @@ using System.Text;
 
 namespace CapMonsterNet.Models.Requests
 {
-    public class GetTaskResultRequest : BaseRequest
+    internal class GetTaskResultRequest : BaseRequest
     {
         /// <summary>
         /// ID which was obtained in createTask method.
