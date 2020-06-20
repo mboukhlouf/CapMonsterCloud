@@ -50,8 +50,9 @@ var recaptchaResponse = solution.GRecaptchaResponse;
 
 # Error handling
 ```c#
-try {
-	int taskId = await client.CreateTaskAsync(captchaTask);
+try 
+{
+    int taskId = await client.CreateTaskAsync(captchaTask);
 }
 catch (CapMonsterException e)
 {
