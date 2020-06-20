@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using CapMonsterNet.Exceptions;
 using CapMonsterNet.Models.CaptchaTasks;
@@ -61,15 +62,27 @@ namespace CapMonsterNet
         /// <summary>
         /// Creates a task for solving captcha
         /// </summary>
+        /// <param name="task">Task object</param>
         /// <returns>Task Id to be used in GetTaskResultAsync</returns>
-        public async Task<int> CreateTaskAsync(CaptchaTask task)
+        public Task<int> CreateTaskAsync(CaptchaTask task)
+        {
+            return CreateTaskAsync(task, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Creates a task for solving captcha
+        /// </summary>
+        /// <param name="task">Task object</param>
+        /// <param name="cancellationToken">The cancellation token to cancel the operation</param>
+        /// <returns></returns>
+        public async Task<int> CreateTaskAsync(CaptchaTask task, CancellationToken cancellationToken)
         {
             var endpoint = Endpoints.CreateTask();
             var requestObject = new CreateTaskRequest
             {
                 Task = task
             };
-            var response = await apiProcessor.ProcessRequestAsync<CreateTaskResponse>(endpoint, requestObject);
+            var response = await apiProcessor.ProcessRequestAsync<CreateTaskResponse>(endpoint, requestObject, cancellationToken);
             response.EnsureSuccess();
             return response.TaskId;
         }
@@ -80,7 +93,19 @@ namespace CapMonsterNet
         /// <typeparam name="CaptchaTaskResultT">The type of the task result</typeparam>
         /// <param name="taskId">The task id which was obtained using CreateTaskAsync</param>
         /// <returns>The task result</returns>
-        public async Task<CaptchaTaskResultT> GetTaskResultAsync<CaptchaTaskResultT>(int taskId) where CaptchaTaskResultT : CaptchaTaskResult
+        public Task<CaptchaTaskResultT> GetTaskResultAsync<CaptchaTaskResultT>(int taskId) where CaptchaTaskResultT : CaptchaTaskResult
+        {
+            return GetTaskResultAsync<CaptchaTaskResultT>(taskId, CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Get the result of the task
+        /// </summary>
+        /// <typeparam name="CaptchaTaskResultT">The type of the task result</typeparam>
+        /// <param name="taskId">The task id which was obtained using CreateTaskAsync</param>
+        /// <param name="cancellationToken">The cancellation token to cancel the operation</param>
+        /// <returns>The task result</returns>
+        public async Task<CaptchaTaskResultT> GetTaskResultAsync<CaptchaTaskResultT>(int taskId, CancellationToken cancellationToken) where CaptchaTaskResultT : CaptchaTaskResult
         {
             var endpoint = Endpoints.GetTaskResult();
             var requestObject = new GetTaskResultRequest
@@ -90,11 +115,11 @@ namespace CapMonsterNet
             GetTaskResultResponse<CaptchaTaskResultT> response;
             while (true)
             {
-                response = await apiProcessor.ProcessRequestAsync<GetTaskResultResponse<CaptchaTaskResultT>>(endpoint, requestObject);
+                response = await apiProcessor.ProcessRequestAsync<GetTaskResultResponse<CaptchaTaskResultT>>(endpoint, requestObject, cancellationToken);
                 response.EnsureSuccess();
                 if (response.Status == CaptchaTaskStatus.Ready)
                     break;
-                await Task.Delay(GetTaskResultDelay);
+                await Task.Delay(GetTaskResultDelay, cancellationToken);
             }
             return response.Solution;
         }
@@ -103,10 +128,20 @@ namespace CapMonsterNet
         /// Get the available balance in the account
         /// </summary>
         /// <returns>The balance available in the account</returns>
-        public async Task<decimal> GetBalanceAsync()
+        public Task<decimal> GetBalanceAsync()
+        {
+            return GetBalanceAsync(CancellationToken.None);
+        }
+
+        /// <summary>
+        /// Get the available balance in the account
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token to cancel the operation</param>
+        /// <returns>The balance available in the account</returns>
+        public async Task<decimal> GetBalanceAsync(CancellationToken cancellationToken)
         {
             var endpoint = Endpoints.GetBalance();
-            var response = await apiProcessor.ProcessRequestAsync<GetBalanceResponse>(endpoint, new GetBalanceRequest());
+            var response = await apiProcessor.ProcessRequestAsync<GetBalanceResponse>(endpoint, new GetBalanceRequest(), cancellationToken);
             response.EnsureSuccess();
             return response.Balance;
         }

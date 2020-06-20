@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 using CapMonsterNet.Models.Requests;
 using CapMonsterNet.Exceptions;
+using System.Threading;
 
 namespace CapMonsterNet
 {
@@ -67,7 +68,7 @@ namespace CapMonsterNet
             Dispose(false);
         }
 
-        private async Task<HttpResponseMessage> CreateRequestAsync(EndpointData endpoint, BaseRequest requestObject)
+        private async Task<HttpResponseMessage> CreateRequestAsync(EndpointData endpoint, BaseRequest requestObject, CancellationToken cancellationToken)
         {
             HttpRequestMessage requestMessage = new HttpRequestMessage();
 
@@ -107,7 +108,7 @@ namespace CapMonsterNet
             HttpResponseMessage response;
             try
             {
-                response = await httpClient.SendAsync(requestMessage);
+                response = await httpClient.SendAsync(requestMessage, cancellationToken);
                 requestMessage.Dispose();
                 return response;
             }
@@ -118,9 +119,19 @@ namespace CapMonsterNet
             }
         }
 
-        public async Task<T> ProcessRequestAsync<T>(EndpointData endpoint, BaseRequest requestObject = null) where T : class
+        public Task<T> ProcessRequestAsync<T>(EndpointData endpoint) where T : class
         {
-            HttpResponseMessage message = await CreateRequestAsync(endpoint, requestObject);
+            return ProcessRequestAsync<T>(endpoint, null, CancellationToken.None);
+        }
+
+        public Task<T> ProcessRequestAsync<T>(EndpointData endpoint, BaseRequest requestObject = null) where T : class
+        {
+            return ProcessRequestAsync<T>(endpoint, requestObject, CancellationToken.None);
+        }
+
+        public async Task<T> ProcessRequestAsync<T>(EndpointData endpoint, BaseRequest requestObject, CancellationToken cancellationToken) where T : class
+        {
+            HttpResponseMessage message = await CreateRequestAsync(endpoint, requestObject, cancellationToken);
             return await HandleJsonResponseAsync<T>(message);
         }
 
