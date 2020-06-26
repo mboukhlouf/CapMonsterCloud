@@ -68,7 +68,7 @@ namespace CapMonsterNet
             Dispose(false);
         }
 
-        private async Task<HttpResponseMessage> CreateRequestAsync(EndpointData endpoint, BaseRequest requestObject, CancellationToken cancellationToken)
+        private Task<HttpResponseMessage> CreateRequestAsync(EndpointData endpoint, BaseRequest requestObject, CancellationToken cancellationToken)
         {
             HttpRequestMessage requestMessage = new HttpRequestMessage();
 
@@ -105,18 +105,9 @@ namespace CapMonsterNet
 
             requestMessage.Method = endpoint.Method;
 
-            HttpResponseMessage response;
-            try
-            {
-                response = await httpClient.SendAsync(requestMessage, cancellationToken);
-                requestMessage.Dispose();
-                return response;
-            }
-            catch (Exception)
-            {
-                requestMessage.Dispose();
-                throw;
-            }
+            var task = httpClient.SendAsync(requestMessage, cancellationToken);
+            task.ContinueWith(_ => requestMessage.Dispose());
+            return task;
         }
 
         public Task<T> ProcessRequestAsync<T>(EndpointData endpoint) where T : class
@@ -131,15 +122,15 @@ namespace CapMonsterNet
 
         public async Task<T> ProcessRequestAsync<T>(EndpointData endpoint, BaseRequest requestObject, CancellationToken cancellationToken) where T : class
         {
-            HttpResponseMessage message = await CreateRequestAsync(endpoint, requestObject, cancellationToken);
-            return await HandleJsonResponseAsync<T>(message);
+            HttpResponseMessage message = await CreateRequestAsync(endpoint, requestObject, cancellationToken).ConfigureAwait(false);
+            return await HandleJsonResponseAsync<T>(message).ConfigureAwait(false);
         }
 
         private static async Task<T> HandleJsonResponseAsync<T>(HttpResponseMessage responseMessage)
         {
             if (responseMessage.IsSuccessStatusCode)
             {
-                var json = await responseMessage.Content.ReadAsStringAsync();
+                var json = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                 T obj;
                 try
@@ -161,7 +152,7 @@ namespace CapMonsterNet
                 return obj;
             }
 
-            var body = await responseMessage.Content.ReadAsStringAsync();
+            var body = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
             responseMessage.Dispose();
             throw CreateApiException(responseMessage.StatusCode, body);
         }

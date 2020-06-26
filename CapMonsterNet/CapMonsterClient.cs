@@ -82,7 +82,7 @@ namespace CapMonsterNet
             {
                 Task = task
             };
-            var response = await apiProcessor.ProcessRequestAsync<CreateTaskResponse>(endpoint, requestObject, cancellationToken);
+            var response = await apiProcessor.ProcessRequestAsync<CreateTaskResponse>(endpoint, requestObject, cancellationToken).ConfigureAwait(false);
             response.EnsureSuccess();
             return response.TaskId;
         }
@@ -115,11 +115,11 @@ namespace CapMonsterNet
             GetTaskResultResponse<CaptchaTaskResultT> response;
             while (true)
             {
-                response = await apiProcessor.ProcessRequestAsync<GetTaskResultResponse<CaptchaTaskResultT>>(endpoint, requestObject, cancellationToken);
+                response = await apiProcessor.ProcessRequestAsync<GetTaskResultResponse<CaptchaTaskResultT>>(endpoint, requestObject, cancellationToken).ConfigureAwait(false);
                 response.EnsureSuccess();
                 if (response.Status == CaptchaTaskStatus.Ready)
                     break;
-                await Task.Delay(GetTaskResultDelay, cancellationToken);
+                await Task.Delay(GetTaskResultDelay, cancellationToken).ConfigureAwait(false);
             }
             return response.Solution;
         }
@@ -141,7 +141,7 @@ namespace CapMonsterNet
         public async Task<decimal> GetBalanceAsync(CancellationToken cancellationToken)
         {
             var endpoint = Endpoints.GetBalance();
-            var response = await apiProcessor.ProcessRequestAsync<GetBalanceResponse>(endpoint, new GetBalanceRequest(), cancellationToken);
+            var response = await apiProcessor.ProcessRequestAsync<GetBalanceResponse>(endpoint, new GetBalanceRequest(), cancellationToken).ConfigureAwait(false);
             response.EnsureSuccess();
             return response.Balance;
         }
