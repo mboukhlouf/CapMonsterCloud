@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.1</TargetFramework>
+    <Authors>M-Boukhlouf</Authors>
+    <Copyright>Copyright © Mohammed Boukhlouf 2020</Copyright>
+    <PackageTags>capmonster;captcha;solver;recaptcha;api;wrapper;</PackageTags>
+    <AssemblyName>CapMonsterCloud</AssemblyName>
+    <RootNamespace>CapMonsterCloud</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+</Project>
