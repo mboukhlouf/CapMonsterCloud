@@ -1,4 +1,4 @@
-# CapMonsterNet
+# CapMonsterCloud
 This is a C# wrapper for [CapMonster Cloud](https://capmonster.cloud/en/) API and provides methods to create a task and get the result of the task.
 
 # Usage
