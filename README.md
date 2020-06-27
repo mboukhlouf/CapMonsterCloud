@@ -1,5 +1,14 @@
+
 # CapMonsterCloud
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/M-Boukhlouf/CapMonsterCloud?style=flat-square) ![Nuget](https://img.shields.io/nuget/v/CapMonsterCloud?style=flat-square) ![GitHub](https://img.shields.io/github/license/M-Boukhlouf/CapMonsterCloud?style=flat-square)
+
 This is a C# wrapper for [CapMonster Cloud](https://capmonster.cloud/en/) API and provides methods to create a task and get the result of the task.
+
+# Installation
+Via Nuget:
+```
+Install-Package CapMonsterCloud
+```
 
 # Usage
 ### Creating a client
