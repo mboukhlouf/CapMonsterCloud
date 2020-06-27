@@ -4,9 +4,14 @@
     <TargetFramework>netstandard1.1</TargetFramework>
     <Authors>M-Boukhlouf</Authors>
     <Copyright>Copyright © Mohammed Boukhlouf 2020</Copyright>
-    <PackageTags>capmonster;captcha;solver;recaptcha;api;wrapper;</PackageTags>
+    <PackageTags>capmonster;capmonstercloud;captcha;solver;recaptcha;api;wrapper;</PackageTags>
     <AssemblyName>CapMonsterCloud</AssemblyName>
     <RootNamespace>CapMonsterCloud</RootNamespace>
+    <PackageProjectUrl>https://github.com/M-Boukhlouf/CapMonsterCloud</PackageProjectUrl>
+    <PackageLicenseFile></PackageLicenseFile>
+    <RepositoryUrl>https://github.com/M-Boukhlouf/CapMonsterCloud</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Description>This is a wrapper for CapMonster Cloud API and provides methods to create a task and get the result of the task.</Description>
   </PropertyGroup>
 
   <ItemGroup>
