@@ -1,17 +1,20 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
-using System;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 
 using CapMonsterCloud.Models.Requests;
 using CapMonsterCloud.Exceptions;
-using System.Threading;
+
 
 namespace CapMonsterCloud
 {
@@ -105,7 +108,7 @@ namespace CapMonsterCloud
 
             requestMessage.Method = endpoint.Method;
 
-            var task = httpClient.SendAsync(requestMessage, cancellationToken);
+            var task = httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
             task.ContinueWith(_ => requestMessage.Dispose());
             return task;
         }
@@ -122,7 +125,7 @@ namespace CapMonsterCloud
 
         public async Task<T> ProcessRequestAsync<T>(EndpointData endpoint, BaseRequest requestObject, CancellationToken cancellationToken) where T : class
         {
-            HttpResponseMessage message = await CreateRequestAsync(endpoint, requestObject, cancellationToken).ConfigureAwait(false);
+            var message = await CreateRequestAsync(endpoint, requestObject, cancellationToken).ConfigureAwait(false);
             return await HandleJsonResponseAsync<T>(message).ConfigureAwait(false);
         }
 
@@ -130,22 +133,28 @@ namespace CapMonsterCloud
         {
             if (responseMessage.IsSuccessStatusCode)
             {
-                var json = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-
+                var jsonStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
                 T obj;
                 try
                 {
-                    obj = JsonConvert.DeserializeObject<T>(json);
+                    using (var streamReader = new StreamReader(jsonStream))
+                    using (var jsonReader = new JsonTextReader(streamReader))
+                    {
+                        var serializer = new JsonSerializer();
+                        obj = serializer.Deserialize<T>(jsonReader);
+                    }
                 }
                 catch (Exception e)
                 {
-                    responseMessage.Dispose();
                     throw new ApiException("Unable to deserialize response message.", e);
+                }
+                finally
+                {
+                    responseMessage.Dispose();
                 }
 
                 if (obj == null)
                 {
-                    responseMessage.Dispose();
                     throw new ApiException("Unable to deserialize response message.");
                 }
 
@@ -153,7 +162,6 @@ namespace CapMonsterCloud
             }
 
             var body = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
-            responseMessage.Dispose();
             throw CreateApiException(responseMessage.StatusCode, body);
         }
 
@@ -162,7 +170,7 @@ namespace CapMonsterCloud
             return new ApiException(message);
         }
 
-        private static String GenerateQueryString(BaseRequest requestObject)
+        private static string GenerateQueryString(BaseRequest requestObject)
         {
             if (requestObject == null)
             {
@@ -170,7 +178,7 @@ namespace CapMonsterCloud
             }
 
             JObject obj = JObject.FromObject(requestObject, JsonSerializer.Create(SerializerSettings));
-            return String.Join("&", obj.Children()
+            return string.Join("&", obj.Children()
                 .Cast<JProperty>()
                 .Where(j => j.Value != null)
                 .Select(j => j.Name + "=" + WebUtility.UrlEncode(j.Value.ToString())));
