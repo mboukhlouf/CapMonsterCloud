@@ -1,5 +1,8 @@
 # CapMonsterCloud
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/M-Boukhlouf/CapMonsterCloud?style=flat-square)](https://github.com/M-Boukhlouf/CapMonsterCloud/releases/latest) [![Nuget](https://img.shields.io/nuget/v/CapMonsterCloud?style=flat-square)](https://www.nuget.org/packages/CapMonsterCloud) [![GitHub](https://img.shields.io/github/license/M-Boukhlouf/CapMonsterCloud?style=flat-square)](https://github.com/M-Boukhlouf/CapMonsterCloud/blob/master/LICENSE)
+[![AppVeyor](https://img.shields.io/appveyor/build/MohammedBoukhlouf/capmonstercloud?style=flat-square)](https://ci.appveyor.com/project/MohammedBoukhlouf/capmonstercloud)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/M-Boukhlouf/CapMonsterCloud?style=flat-square)](https://github.com/M-Boukhlouf/CapMonsterCloud/releases/latest) 
+[![Nuget](https://img.shields.io/nuget/v/CapMonsterCloud?style=flat-square)](https://www.nuget.org/packages/CapMonsterCloud) 
+[![GitHub](https://img.shields.io/github/license/M-Boukhlouf/CapMonsterCloud?style=flat-square)](https://github.com/M-Boukhlouf/CapMonsterCloud/blob/master/LICENSE)
 
 This is a C# wrapper for [CapMonster Cloud](https://capmonster.cloud/en/) API and provides methods to create a task and get the result of the task.
 
