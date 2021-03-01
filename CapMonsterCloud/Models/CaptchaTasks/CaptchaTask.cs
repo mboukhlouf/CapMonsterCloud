@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CapMonsterCloud.Models.CaptchaTasks
+﻿namespace CapMonsterCloud.Models.CaptchaTasks
 {
     public abstract class CaptchaTask
     {
