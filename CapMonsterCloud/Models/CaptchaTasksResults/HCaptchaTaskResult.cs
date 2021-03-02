@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CapMonsterCloud.Models.CaptchaTasksResults
+﻿namespace CapMonsterCloud.Models.CaptchaTasksResults
 {
     public class HCaptchaTaskResult : CaptchaTaskResult
     {
@@ -10,5 +6,5 @@ namespace CapMonsterCloud.Models.CaptchaTasksResults
         /// Hcaptcha solution
         /// </summary>
         public string GRecaptchaResponse { get; set; }
-    }
+    } 
 }
