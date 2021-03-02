@@ -32,6 +32,8 @@ Task types:
 - NoCaptchaTask
 - NoCaptchaTaskProxyless
 - RecaptchaV3TaskProxyless
+- HCaptchaTask
+- HCaptchaTaskProxyless
 
 ```c#
 // Creating a NoCaptchaTaskProxyless task object
@@ -51,6 +53,8 @@ Task result types:
 - NoCaptchaTaskProxylessResult
 - NoCaptchaTaskResult
 - RecaptchaV3TaskProxylessResult
+- HCaptchaTaskProxylessResult
+- HCaptchaTaskResult
 
 ```c#
 // Get the task result

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CapMonsterCloud.Models.Responses
+﻿namespace CapMonsterCloud.Models.Responses
 {
     internal class CreateTaskResponse : BaseResponse
     {

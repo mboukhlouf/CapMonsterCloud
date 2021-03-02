@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CapMonsterCloud.Models.Requests
+﻿namespace CapMonsterCloud.Models.Requests
 {
     internal abstract class BaseRequest
     {

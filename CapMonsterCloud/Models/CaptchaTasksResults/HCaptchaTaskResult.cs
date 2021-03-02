@@ -1,10 +1,10 @@
 ﻿namespace CapMonsterCloud.Models.CaptchaTasksResults
 {
-    public class NoCaptchaTaskProxylessResult : CaptchaTaskResult
+    public class HCaptchaTaskResult : CaptchaTaskResult
     {
         /// <summary>
-        /// Recaptcha solution
+        /// Hcaptcha solution
         /// </summary>
         public string GRecaptchaResponse { get; set; }
-    }
+    } 
 }

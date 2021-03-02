@@ -1,7 +1,4 @@
 ﻿using CapMonsterCloud.Models.CaptchaTasksResults;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CapMonsterCloud.Models.Responses
 {
